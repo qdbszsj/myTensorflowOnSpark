@@ -57,7 +57,7 @@ if args.format == "tfr":
   dataRDD = images.map(lambda x: toNumpy(bytes(x[0])))
 else:
   if args.format == "csv":
-    images = sc.textFile(args.images).map(lambda ln: [ord(x) for x in ln.split(',')])
+    images = sc.textFile(args.images).map(lambda ln: [int(x) for x in ln.split(',')])
     labels = sc.textFile(args.labels).map(lambda ln: [float(x) for x in ln.split(',')])
   else:  # args.format == "pickle":
     images = sc.pickleFile(args.images)
