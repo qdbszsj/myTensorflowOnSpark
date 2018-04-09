@@ -1,3 +1,9 @@
+'''
+尝试模仿雅虎给的demo，把CNN的开源训练代码改成他们的形式，但是tf的东西我不太熟，很多细节不好改，暂时放弃了，这份代码尚未完成
+
+'''
+
+
 import argparse
 import os
 import time
