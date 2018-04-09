@@ -27,7 +27,7 @@ def writeWiki(sc, imagePath, labelPath, output, num_partitions, imageWidth):
   print(totalLen,singleLen,number)
   imageList=[]
   for i in range(totalLen):
-    imageList.append(imagesString[i])
+    imageList.append(ord(imagesString[i]))
   images=np.array(imageList).reshape(number, singleLen)
   
 
