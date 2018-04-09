@@ -1,11 +1,33 @@
 '''
 尝试把wiki_crop转化为mnist那种数据格式，然后套进去，用雅虎给的demo的代码跑
-用这个脚本跑，先把wiki转化为格式化的csv，第一列是年龄，第二列是image
-跑出来之后，在脚本文件同目录下会存出三个文件，
-第一个是全部的dataset，然后还有train和test，
+用这个脚本跑，先把wiki转化为格式化的数据，生成四个文件
+train_set
+train_label.csv
+test_set
+test_label.csv
+两个label文件都只有一列，列名是age
+train_set和test_set都是byte文件，相当于字符串，比如宽度是50的照片，存5张，那么每张图的字符串长度就是50*50*3=7500，总长度是5*7500
 另外还可以设置脚本的参数，test_size控制测试集比例，
 max_age和min_age控制取出来的集合的年龄范围，闭区间，还有一个face_width控制dlib取出来的图片的大小，也就是正方形的边长。
+执行：
+python wiki2csv.py --test_size 0.4 --face_width 50 --max_age 5 --min_age 1
+下面这个截图表示40%用于测试集，人脸宽高50像素，年龄范围[1,5]
 '''
+# ==============================================================================
+#coding=utf-8
+# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 # ==============================================================================
 
 from __future__ import absolute_import
@@ -80,6 +102,7 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age):
         return image_raw
 
     data_sets = get_meta(db_path, db_name)
+    print(data_sets.shape)
     print("main")
 
     data_sets = data_sets[data_sets.score > 0.75]
@@ -94,10 +117,22 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age):
     data_sets = data_sets[data_sets.file_name != 'NULL']
 
     print(data_sets.shape)
+    
     train_sets, test_sets = train_test_split(data_sets, test_size=test_size, random_state=2017)
-    data_sets.to_csv('dataset.csv',header=True,index=False)
-    train_sets.to_csv('train_set.csv',header=True,index=False)
-    test_sets.to_csv('test_set.csv',header=True,index=False)
+    #data_sets.to_csv('dataset.csv',header=True,index=False, sep=",")
+    train_sets['age'].to_csv('train_label.csv',header=True,index=False, sep=",")
+    m,n=train_sets.shape
+    F = open("train_set","w") 
+    for i in range(m):
+        F.write(train_sets['file_name'].values[i])
+    F.close()
+
+    test_sets['age'].to_csv('test_label.csv',header=True,index=False, sep=",")
+    F = open("test_set","w") 
+    for i in range(m):
+        F.write(train_sets['file_name'].values[i])
+    F.close()
+
     print(train_sets.shape,test_sets.shape)
     duration = time.time() - start_time
     print("Running %.3f sec All done!" % duration)
