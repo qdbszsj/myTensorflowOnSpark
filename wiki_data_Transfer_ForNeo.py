@@ -1,3 +1,4 @@
+#encoding=utf-8
 '''
 把wiki2csv的train_set或者test_set转化成用int表示的csv，即每一行都是用","隔开的int值。
 imageWidth是之前选取的图片宽度，如果有100张图片，宽度是20，那么读入的文件是一个长度为100*20*20*3的字符串
