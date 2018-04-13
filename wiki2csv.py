@@ -67,7 +67,7 @@ def calc_age(taken, dob):
 
 
 
-def main(db_path, db_name, test_size, face_width, max_age, min_age):
+def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
     start_time = time.time()
     def imagePath2string(path):
         #print("fuck")
@@ -106,16 +106,16 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age):
     
     train_sets, test_sets = train_test_split(data_sets, test_size=test_size, random_state=2017)
     #data_sets.to_csv('dataset.csv',header=True,index=False, sep=",")
-    train_sets['age'].to_csv('train_label.csv',header=True,index=False, sep=",")
+    train_sets['age'].to_csv("myData/train_label"+str(threadID),header=True,index=False, sep=",")
     m,n=train_sets.shape
-    F = open("train_set","w") 
+    F = open("myData/train_set"+str(threadID),"w") 
     for i in range(m):
         F.write(train_sets['file_name'].values[i])
     F.close()
 
-    test_sets['age'].to_csv('test_label.csv',header=True,index=False, sep=",")
+    test_sets['age'].to_csv('myData/test_label'+str(threadID),header=True,index=False, sep=",")
     m,n=test_sets.shape
-    F = open("test_set","w") 
+    F = open("myData/test_set"+str(threadID),"w") 
     for i in range(m):
         F.write(test_sets['file_name'].values[i])
     F.close()
@@ -133,9 +133,10 @@ if __name__ == '__main__':
     parser.add_argument("--test_size", type=float, default=0.01, help="How many items as testset")
     parser.add_argument("--face_width", type=int, default=160, help="dlib_detect_face_width")  
     parser.add_argument("--max_age", type=int, default=100, help="maxAgeInTheTrainData")
-    parser.add_argument("--min_age", type=int, default=0, help="minAgeInTheTrainData")    
+    parser.add_argument("--min_age", type=int, default=0, help="minAgeInTheTrainData")  
+    parser.add_argument("--threadID", type=int, default=0, help="ID")
     args = parser.parse_args()
 
 
     print("Using wiki dataset")
-    main(db_path=args.wiki_db, db_name="wiki", test_size=args.test_size, face_width=args.face_width, max_age=args.max_age, min_age=args.min_age)
+    main(db_path=args.wiki_db, db_name="wiki", test_size=args.test_size, face_width=args.face_width, max_age=args.max_age, min_age=args.min_age, threadID=args.threadID)
