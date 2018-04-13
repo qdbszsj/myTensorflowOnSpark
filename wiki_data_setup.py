@@ -72,7 +72,6 @@ if __name__ == "__main__":
   print("args:", args)
 
   sc = SparkContext(conf=SparkConf().setAppName("wiki_parallelize"))
-  sc=1
 
   writeWiki(sc, args.trainImagePath, args.trainLabelPath, args.output + "/train", args.num_partitions, args.image_width)
   writeWiki(sc, args.testImagePath, args.testLabelPath, args.output + "/test", args.num_partitions, args.image_width)
