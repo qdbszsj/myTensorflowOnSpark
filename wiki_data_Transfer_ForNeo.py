@@ -10,7 +10,7 @@ import pandas as pd
 ###########################################################################
 trainSetPath="train_set"
 testSetPath="train_set"
-trainLabelPath="trian_label.csv"
+trainLabelPath="train_label.csv"
 testLabelPath="test_label.csv"
 imageWidth=160
 savePath="neo_set"
