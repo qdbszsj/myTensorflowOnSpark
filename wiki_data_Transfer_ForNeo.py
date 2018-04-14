@@ -5,17 +5,30 @@ imageWidth是之前选取的图片宽度，如果有100张图片，宽度是20�
 最终输出的csv文件是100行，每行是20*20*3共1200个用逗号隔开的0-255的int值
 '''
 import numpy as np
+import pandas as pd
 #这里参数设置，很重要
 ###########################################################################
-imagePath="train_set"
-imageWidth=50
-savePath="neo_train_set"
+trainSetPath="train_set"
+testSetPath="train_set"
+trainLabelPath="trian_label.csv"
+testLabelPath="test_label.csv"
+imageWidth=160
+savePath="neo_set"
 ###########################################################
 
-imagesFile = open(imagePath,"rb") 
-imagesString=imagesFile.read() 
+trainSetFile = open(trainSetPath,"rb") 
+trainSetString=trainSetFile.read() 
+testSetFile = open(testSetPath,"rb") 
+testSetString=testSetFile.read()
+trainSetFile.close()
+testSetFile.close()
+imageString=trainSetString+testSetString
 totalLen=len(imagesString)
 print(totalLen)
+
+trainLabel=pd.read_csv(trainLabelPath)
+testLabel=pd.read_csv(testLabelPath)
+label=pd.concat([trainLabel,testLabel])
 
 singleLen=imageWidth*imageWidth*3
 number=int(totalLen/singleLen)
@@ -25,11 +38,12 @@ for i in range(totalLen):
   imageList.append(ord(imagesString[i]))
 images=np.array(imageList).reshape(number, singleLen)
 images.astype(int)
+labels=label.values
+total=np.c_[labels,images]
 
-print(images.shape)#m * 7500
+print(total.shape)#m * 76800
 
-np.savetxt('neo_train_set', images, fmt="%d", delimiter=",")
+np.savetxt(savePath, total, fmt="%d", delimiter=",")
 
-imagesFile.close()
 
 print("finish save "+ savePath)
