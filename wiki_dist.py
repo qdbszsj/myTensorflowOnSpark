@@ -24,7 +24,8 @@ def map_fun(args, ctx):
     time.sleep((worker_num + 1) * 5)
 
   # Parameters
-  IMAGE_PIXELS = 28
+  #IMAGE_PIXELS = 28
+  IMAGE_PIXELS = 20
   hidden_units = 128
   batch_size = args.batch_size
 
@@ -56,16 +57,20 @@ def map_fun(args, ctx):
 
       # Placeholders or QueueRunner/Readers for input data
       with tf.name_scope('inputs'):
-        x = tf.placeholder(tf.float32, [None, IMAGE_PIXELS * IMAGE_PIXELS], name="x")
-        y_ = tf.placeholder(tf.float32, [None, 10], name="y_")
+        #x = tf.placeholder(tf.float32, [None, IMAGE_PIXELS * IMAGE_PIXELS], name="x")
+        x = tf.placeholder(tf.float32, [None, IMAGE_PIXELS * IMAGE_PIXELS*3 ], name="x")
+        #y_ = tf.placeholder(tf.float32, [None, 10], name="y_")
+        y_ = tf.placeholder(tf.float32, [None, 3], name="y_")
 
-        x_img = tf.reshape(x, [-1, IMAGE_PIXELS, IMAGE_PIXELS, 1])
+        #x_img = tf.reshape(x, [-1, IMAGE_PIXELS, IMAGE_PIXELS, 1])
+        x_img = tf.reshape(x, [-1, IMAGE_PIXELS, IMAGE_PIXELS * 3, 1])
         tf.summary.image("x_img", x_img)
 
       with tf.name_scope('layer'):
         # Variables of the hidden layer
         with tf.name_scope('hidden_layer'):
-          hid_w = tf.Variable(tf.truncated_normal([IMAGE_PIXELS * IMAGE_PIXELS, hidden_units], stddev=1.0 / IMAGE_PIXELS), name="hid_w")
+          #hid_w = tf.Variable(tf.truncated_normal([IMAGE_PIXELS * IMAGE_PIXELS, hidden_units], stddev=1.0 / IMAGE_PIXELS), name="hid_w")
+          hid_w = tf.Variable(tf.truncated_normal([IMAGE_PIXELS * IMAGE_PIXELS *3, hidden_units], stddev=1.0 / IMAGE_PIXELS), name="hid_w")
           hid_b = tf.Variable(tf.zeros([hidden_units]), name="hid_b")
           tf.summary.histogram("hidden_weights", hid_w)
           hid_lin = tf.nn.xw_plus_b(x, hid_w, hid_b)
@@ -73,8 +78,10 @@ def map_fun(args, ctx):
 
         # Variables of the softmax layer
         with tf.name_scope('softmax_layer'):
-          sm_w = tf.Variable(tf.truncated_normal([hidden_units, 10], stddev=1.0 / math.sqrt(hidden_units)), name="sm_w")
-          sm_b = tf.Variable(tf.zeros([10]), name="sm_b")
+          #sm_w = tf.Variable(tf.truncated_normal([hidden_units, 10], stddev=1.0 / math.sqrt(hidden_units)), name="sm_w")
+          sm_w = tf.Variable(tf.truncated_normal([hidden_units, 3], stddev=1.0 / math.sqrt(hidden_units)), name="sm_w")
+          #sm_b = tf.Variable(tf.zeros([10]), name="sm_b")
+          sm_b = tf.Variable(tf.zeros([3]), name="sm_b")
           tf.summary.histogram("softmax_weights", sm_w)
           y = tf.nn.softmax(tf.nn.xw_plus_b(hid, sm_w, sm_b))
 
