@@ -1,6 +1,6 @@
 '''
 尝试把wiki_crop转化为mnist那种数据格式，然后套进去，用雅虎给的demo的代码跑
-用这个脚本跑，先把wiki转化为格式化的数据，生成四个文件
+用这个脚本跑，先把wiki转化为格式化的数据，生成四个文件,在myData文件夹下
 train_set
 train_label.csv
 test_set
