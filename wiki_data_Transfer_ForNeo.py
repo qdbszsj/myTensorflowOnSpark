@@ -9,7 +9,7 @@ import pandas as pd
 #这里参数设置，很重要
 ###########################################################################
 trainSetPath="train_set"
-testSetPath="train_set"
+testSetPath="test_set"
 trainLabelPath="train_label.csv"
 testLabelPath="test_label.csv"
 imageWidth=160
