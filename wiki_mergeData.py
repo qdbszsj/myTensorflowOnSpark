@@ -31,5 +31,8 @@ def mergeLabel(labelName):
     label['age'].to_csv(savePath+labelName+".csv",header=True,index=False, sep=",")
     print(label.shape)
 
+mergeLabel("train_label")
+mergeLabel("test_label")
+
 
 print("finish save "+ savePath)
