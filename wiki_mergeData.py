@@ -26,7 +26,7 @@ mergeDataset("test_set")
 def mergeLabel(labelName): 
     label=pd.read_csv(imagePath+labelName+"0")
     for i in range(1,num_thread):
-        curLabel=pd.read_csv(imagePath+labelName+str(i))
+        curLabel=pd.read_csv(imagePath+labelName+str(i),delimiter=',')
         label=pd.concat([label,curLabel])
     label['age'].to_csv(savePath+labelName+".csv",header=True,index=False, sep=",")
     print(label.shape)
