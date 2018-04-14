@@ -1,3 +1,8 @@
+#encoding=utf-8
+'''
+将单张图片读入并处理成想要的格式，以便于测试
+'''
+
 import cv2
 import dlib
 import numpy as np
