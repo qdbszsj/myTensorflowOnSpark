@@ -37,6 +37,6 @@ wiki_data_Transfer_ForNeo.py
 
 
 
-#TensorFlow on spark：
+# TensorFlow on spark：
 先用spark-submit执行wiki_data_setup.py把数据存到hdfs里
 然后执行wiki_spark.py训练，其中会调用wiki_dist.py
