@@ -42,13 +42,13 @@ for i in range(totalLen):
   imageList.append(ord(imagesString[i]))
 images=np.array(imageList).reshape(number, singleLen)
 images.astype(int)
-labels=label.values
+#labels=label.values
 #total=np.c_[labels,images]
 
 print(images.shape)#m * 76800
 
 np.savetxt(savePath, images, fmt="%d", delimiter=",")
-np.savetxt(savePath+'label', images, fmt="%d", delimiter=",")
+label.to_csv(savePath+'label')
 
 
 print("finish save "+ savePath)
