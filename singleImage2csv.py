@@ -8,11 +8,19 @@ import cv2
 import dlib
 import numpy as np
 import pandas as pd
+from sklearn.decomposition import PCA
 from imutils.face_utils import FaceAligner
 import argparse
 import time
 
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
+from pyspark.context import SparkContext
+from pyspark.conf import SparkConf
+
+from pyspark.mllib.tree import GradientBoostedTrees, GradientBoostedTreesModel
 
 def main(imagePath,faceWidth,savePath):
     #print("fuck")
@@ -42,6 +50,19 @@ def main(imagePath,faceWidth,savePath):
     print("finish save",savePath)
     duration = time.time() - start_time
     print("Running %.3f sec All done!" % duration)
+    
+    pca = PCA(n_components=40)
+    train = pca.fit_transform(myImage)
+    
+    
+    sc = SparkContext(conf=SparkConf().setAppName("wiki_spark_prediction"))
+    model = GradientBoostedTreesModel.load(sc,"hdfs://student61:9000/mnist/GBDT_model")
+    predictions = model.predict(train.map(lambda x: x.features))
+    print("--------------------------------------------------------------------------------------------------")
+    print(predictions)
+    
+    
+    
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
