@@ -13,17 +13,7 @@ from imutils.face_utils import FaceAligner
 import argparse
 import time
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
-from pyspark.context import SparkContext
-from pyspark.conf import SparkConf
-
-from pyspark.mllib.tree import GradientBoostedTrees, GradientBoostedTreesModel
-
 def main(imagePath,faceWidth,savePath):
-    #print("fuck")
     start_time = time.time()
     shape_predictor = 'shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
@@ -46,29 +36,27 @@ def main(imagePath,faceWidth,savePath):
     myImage=np.array(imageList).reshape(1,faceWidth*faceWidth*3)
     myImage.astype(int)
     
-    np.savetxt(savePath, myImage, fmt="%d", delimiter=",")
+    #np.savetxt(savePath, myImage, fmt="%d", delimiter=",")
+
+    
+    myImage = pd.DataFrame(myImage)
+    train=pd.read_csv("face_trainSet.csv",names=[str(i) for i in range(1200)]+ ['label'])
+    y = train['label']
+    train = train.drop('label',axis=1)
+    train = pd.concat([train,myImage])
+    pca = PCA(n_components=140)
+    train = pca.fit_transform()
+    finalItem = train[train.shape[0]-1:]
+    finalItem.to_csv(savePath,index=False,header=False)
     print("finish save",savePath)
     duration = time.time() - start_time
     print("Running %.3f sec All done!" % duration)
-    
-    pca = PCA(n_components=40)
-    train = pca.fit_transform(myImage)
-    
-    
-    sc = SparkContext(conf=SparkConf().setAppName("wiki_spark_prediction"))
-    model = GradientBoostedTreesModel.load(sc,"hdfs://student61:9000/mnist/GBDT_model")
-    predictions = model.predict(train.map(lambda x: x.features))
-    print("--------------------------------------------------------------------------------------------------")
-    print(predictions)
-    
-    
-    
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--imagePath", type=str, default="parker.jpg")
     parser.add_argument("--faceWidth", type=int, default=70, help="dlib_detect_face_width") 
-    parser.add_argument("--savePath", type=str, default="curImage.csv") 
+    parser.add_argument("--savePath", type=str, default='final_Item.csv') 
    
     args = parser.parse_args()
 
