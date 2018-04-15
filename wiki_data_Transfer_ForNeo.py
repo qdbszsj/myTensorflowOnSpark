@@ -10,7 +10,6 @@ imageWidth是之前选取的图片宽度，如果有100张图片，宽度是20�
 '''
 import numpy as np
 import pandas as pd
-#这里参数设置，很重要
 ###########################################################################
 trainSetPath="train_set"
 testSetPath="test_set"
@@ -20,12 +19,12 @@ imageWidth=30
 savePath="neo_set"
 ###########################################################
 
-trainSetFile = open(trainSetPath,"rb") 
-trainSetString=trainSetFile.read() 
-testSetFile = open(testSetPath,"rb") 
+trainSetFile = open(trainSetPath,"rb")
+trainSetString=trainSetFile.read()
+testSetFile = open(testSetPath,"rb")
 testSetString=testSetFile.read()
 imagesString=str(trainSetString)+str(testSetString)
-totalLen=len(imageString)
+totalLen=len(imagesString)
 print(totalLen)
 trainSetFile.close()
 testSetFile.close()
