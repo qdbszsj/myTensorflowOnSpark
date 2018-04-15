@@ -1,7 +1,7 @@
 #encoding=utf-8
 '''
 将单张图片读入并处理成想要的格式，以便于测试
-处理成一行以“,”分隔的0-255的int值，width是70，那么长度就是14700
+处理成一行以“,”分隔的0-255的int值，width是70，那么长度就是14700，然后跟训练集做pca
 '''
 
 import cv2
@@ -40,7 +40,7 @@ def main(imagePath,faceWidth,savePath):
 
 
     myImage = pd.DataFrame(myImage,columns=[str(i) for i in range(2700)])
-    train=pd.read_csv("neoData/train_set",names=[str(i) for i in range(2700)])
+    train=pd.read_csv("neoData/neo_set",names=[str(i) for i in range(2700)])
 
     print(myImage.info())
     print(train.info())
@@ -64,3 +64,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(imagePath=args.imagePath, faceWidth=args.faceWidth, savePath=args.savePath)
+
