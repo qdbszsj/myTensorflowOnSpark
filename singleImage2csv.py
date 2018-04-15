@@ -18,12 +18,12 @@ def main(imagePath,faceWidth,savePath):
     shape_predictor = 'shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(shape_predictor)
-    fa = FaceAligner(predictor, desiredFaceWidth=faceWidth)  
-    
+    fa = FaceAligner(predictor, desiredFaceWidth=faceWidth)
+
     image = cv2.imread(imagePath, cv2.IMREAD_COLOR)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     rects = detector(gray, 2)
-    if len(rects) != 1: 
+    if len(rects) != 1:
         print("NLLL")
         return "NULL"
     image_raw = fa.align(image, gray, rects[0])
@@ -35,29 +35,32 @@ def main(imagePath,faceWidth,savePath):
         imageList.append(ord(image_raw[i]))
     myImage=np.array(imageList).reshape(1,faceWidth*faceWidth*3)
     myImage.astype(int)
-    
+
     #np.savetxt(savePath, myImage, fmt="%d", delimiter=",")
 
-    
-    myImage = pd.DataFrame(myImage)
-    train=pd.read_csv("face_trainSet.csv",names=[str(i) for i in range(1200)]+ ['label'])
-    y = train['label']
-    train = train.drop('label',axis=1)
+
+    myImage = pd.DataFrame(myImage,columns=[str(i) for i in range(2700)])
+    train=pd.read_csv("neoData/train_set",names=[str(i) for i in range(2700)])
+
+    print(myImage.info())
+    print(train.info())
     train = pd.concat([train,myImage])
-    pca = PCA(n_components=140)
-    train = pca.fit_transform()
+    pca = PCA(n_components=200)
+    print(train.shape)
+    train = pca.fit_transform(train)
     finalItem = train[train.shape[0]-1:]
-    finalItem.to_csv(savePath,index=False,header=False)
+    np.savetxt(savePath, finalItem,delimiter=",")
+   # finalItem.to_csv(savePath,index=False,header=False)
     print("finish save",savePath)
     duration = time.time() - start_time
     print("Running %.3f sec All done!" % duration)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--imagePath", type=str, default="parker.jpg")
-    parser.add_argument("--faceWidth", type=int, default=70, help="dlib_detect_face_width") 
-    parser.add_argument("--savePath", type=str, default='final_Item.csv') 
-   
+    parser.add_argument("--imagePath", type=str, default="parker1.jpg")
+    parser.add_argument("--faceWidth", type=int, default=30, help="dlib_detect_face_width")
+    parser.add_argument("--savePath", type=str, default='final_Item.csv')
+
     args = parser.parse_args()
 
     main(imagePath=args.imagePath, faceWidth=args.faceWidth, savePath=args.savePath)
