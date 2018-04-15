@@ -2,7 +2,7 @@
 '''
 这个要配合wiki2csv和wiki_mergeData来使用，先wiki2csv存到了myData文件夹下，如果有多个进程，存成好几份，要先运行wiki_mergeData.py合并成
 train_set,test_set,train_label,testlabel
-然后运行这个脚本，把四个文件合成一个文件。名为nei_set
+然后运行这个脚本，把四个文件合成2个文件。名为neo_set 和neo_setlabel
 用int表示的csv，即每一行都是用","隔开的int值。
 第一列是label，一个1-100的int值
 imageWidth是之前选取的图片宽度，如果有100张图片，宽度是20，那么读入的文件是一个长度为100*20*20*3的字符串
