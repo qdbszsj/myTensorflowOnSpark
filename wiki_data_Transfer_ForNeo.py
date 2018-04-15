@@ -16,7 +16,7 @@ trainSetPath="train_set"
 testSetPath="test_set"
 trainLabelPath="train_label.csv"
 testLabelPath="test_label.csv"
-imageWidth=160
+imageWidth=30
 savePath="neo_set"
 ###########################################################
 
@@ -43,11 +43,12 @@ for i in range(totalLen):
 images=np.array(imageList).reshape(number, singleLen)
 images.astype(int)
 labels=label.values
-total=np.c_[labels,images]
+#total=np.c_[labels,images]
 
-print(total.shape)#m * 76800
+print(images.shape)#m * 76800
 
-np.savetxt(savePath, total, fmt="%d", delimiter=",")
+np.savetxt(savePath, images, fmt="%d", delimiter=",")
+np.savetxt(savePath+'label', images, fmt="%d", delimiter=",")
 
 
 print("finish save "+ savePath)
