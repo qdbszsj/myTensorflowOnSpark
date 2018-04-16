@@ -15,7 +15,7 @@ import time
 
 def main(imagePath,faceWidth,savePath):
     start_time = time.time()
-    shape_predictor = 'shape_predictor_68_face_landmarks.dat'
+    shape_predictor = '~/wiki-test/Age-Gender-Estimate-TF-master/shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(shape_predictor)
     fa = FaceAligner(predictor, desiredFaceWidth=faceWidth)
