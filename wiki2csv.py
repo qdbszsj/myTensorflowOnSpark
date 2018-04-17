@@ -15,7 +15,6 @@ python wiki2csv.py --test_size 0.4 --face_width 50 --max_age 5 --min_age 1
 '''
 # ==============================================================================
 
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -74,12 +73,12 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
         shape_predictor = 'shape_predictor_68_face_landmarks.dat'
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(shape_predictor)
-        fa = FaceAligner(predictor, desiredFaceWidth=face_width)  
-        
+        fa = FaceAligner(predictor, desiredFaceWidth=face_width)
+
         image = cv2.imread("data/wiki_crop/"+path[0], cv2.IMREAD_COLOR)
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         rects = detector(gray, 2)
-        if len(rects) != 1: 
+        if len(rects) != 1:
             print("NLLL")
             return "NULL"
         image_raw = fa.align(image, gray, rects[0])
@@ -94,28 +93,28 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
     data_sets = data_sets[data_sets.score > 0.75]
     data_sets = data_sets[data_sets.age <= max_age]
     data_sets = data_sets[data_sets.age >= min_age]
-    
+
 
     m,n=data_sets.shape
     print(data_sets.shape)
     data_sets['file_name']=data_sets['file_name'].apply(imagePath2string)
-    data_sets = data_sets.drop(['gender','score','second_score'],axis=1)    
+    data_sets = data_sets.drop(['gender','score','second_score'],axis=1)
     data_sets = data_sets[data_sets.file_name != 'NULL']
 
     print(data_sets.shape)
-    
+
     train_sets, test_sets = train_test_split(data_sets, test_size=test_size, random_state=2017)
     #data_sets.to_csv('dataset.csv',header=True,index=False, sep=",")
     train_sets['age'].to_csv("myData/train_label"+str(threadID),header=True,index=False, sep=",")
     m,n=train_sets.shape
-    F = open("myData/train_set"+str(threadID),"w") 
+    F = open("myData/train_set"+str(threadID),"w")
     for i in range(m):
         F.write(train_sets['file_name'].values[i])
     F.close()
 
     test_sets['age'].to_csv('myData/test_label'+str(threadID),header=True,index=False, sep=",")
     m,n=test_sets.shape
-    F = open("myData/test_set"+str(threadID),"w") 
+    F = open("myData/test_set"+str(threadID),"w")
     for i in range(m):
         F.write(test_sets['file_name'].values[i])
     F.close()
@@ -131,9 +130,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--wiki_db", type=str, default="./data/wiki_crop/wiki.mat")
     parser.add_argument("--test_size", type=float, default=0.01, help="How many items as testset")
-    parser.add_argument("--face_width", type=int, default=160, help="dlib_detect_face_width")  
+    parser.add_argument("--face_width", type=int, default=160, help="dlib_detect_face_width")
     parser.add_argument("--max_age", type=int, default=100, help="maxAgeInTheTrainData")
-    parser.add_argument("--min_age", type=int, default=0, help="minAgeInTheTrainData")  
+    parser.add_argument("--min_age", type=int, default=0, help="minAgeInTheTrainData")
     parser.add_argument("--threadID", type=int, default=0, help="ID")
     args = parser.parse_args()
 
