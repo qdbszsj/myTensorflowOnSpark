@@ -60,7 +60,6 @@ def calc_age(taken, dob):
 def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
     start_time = time.time()
     def imagePath2string(path):
-        #print("fuck")
         shape_predictor = 'shape_predictor_68_face_landmarks.dat'
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(shape_predictor)
