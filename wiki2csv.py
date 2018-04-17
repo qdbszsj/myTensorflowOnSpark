@@ -33,9 +33,6 @@ from imutils.face_utils import FaceAligner
 from scipy.io import loadmat
 from sklearn.model_selection import train_test_split
 
-
-
-
 def get_meta(mat_path, db):
     meta = loadmat(mat_path)
     full_path = meta[db][0, 0]["full_path"][0]
@@ -51,8 +48,6 @@ def get_meta(mat_path, db):
     #print(dataset)
     return dataset
 
-
-
 def calc_age(taken, dob):
     birth = datetime.fromordinal(max(int(dob) - 366, 1))
 
@@ -61,10 +56,6 @@ def calc_age(taken, dob):
         return taken - birth.year
     else:
         return taken - birth.year - 1
-
-
-
-
 
 def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
     start_time = time.time()
@@ -94,7 +85,6 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
     data_sets = data_sets[data_sets.age <= max_age]
     data_sets = data_sets[data_sets.age >= min_age]
 
-
     m,n=data_sets.shape
     print(data_sets.shape)
     data_sets['file_name']=data_sets['file_name'].apply(imagePath2string)
@@ -123,8 +113,6 @@ def main(db_path, db_name, test_size, face_width, max_age, min_age, threadID):
     duration = time.time() - start_time
     print("Running %.3f sec All done!" % duration)
     return
-
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
