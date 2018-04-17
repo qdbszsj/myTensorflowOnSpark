@@ -3,7 +3,6 @@
 将单张图片读入并处理成想要的格式，以便于测试
 处理成一行以“,”分隔的0-255的int值，width是70，那么长度就是14700，然后跟训练集做pca
 '''
-
 import cv2
 import dlib
 import numpy as np
@@ -15,7 +14,7 @@ import time
 
 def main(imagePath,faceWidth,savePath):
     start_time = time.time()
-    shape_predictor = '~/wiki-test/Age-Gender-Estimate-TF-master/shape_predictor_68_face_landmarks.dat'
+    shape_predictor = '/home/hduser/wiki-test/Age-Gender-Estimate-TF-master/shape_predictor_68_face_landmarks.dat'
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(shape_predictor)
     fa = FaceAligner(predictor, desiredFaceWidth=faceWidth)
@@ -40,7 +39,7 @@ def main(imagePath,faceWidth,savePath):
 
 
     myImage = pd.DataFrame(myImage,columns=[str(i) for i in range(2700)])
-    train=pd.read_csv("neoData/neo_set",names=[str(i) for i in range(2700)])
+    train=pd.read_csv("/home/hduser/wiki-test/Age-Gender-Estimate-TF-master/neoData/neo_set",names=[str(i) for i in range(2700)])
 
     print(myImage.info())
     print(train.info())
@@ -49,7 +48,7 @@ def main(imagePath,faceWidth,savePath):
     print(train.shape)
     train = pca.fit_transform(train)
     finalItem = train[train.shape[0]-1:]
-    np.savetxt(savePath, finalItem,delimiter=",")
+    np.savetxt(savePath, finalItem,fmt="%lf",delimiter=",")
    # finalItem.to_csv(savePath,index=False,header=False)
     print("finish save",savePath)
     duration = time.time() - start_time
@@ -64,4 +63,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(imagePath=args.imagePath, faceWidth=args.faceWidth, savePath=args.savePath)
+
 
