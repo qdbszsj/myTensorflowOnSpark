@@ -32,11 +32,56 @@ wiki_label2oneHot.py
 wiki_data_Transfer_ForNeo.py
 会在同一目录下生成neo_set这个文件
 
-
-
-
-
-
 # TensorFlow on spark：
 先用spark-submit执行wiki_data_setup.py把数据存到hdfs里
 然后执行wiki_spark.py训练，其中会调用wiki_dist.py
+
+
+# 以上内容皆作废，尝试tf on spark 失败了，
+# 后面我们用的spark mllib，pca加传统机器学习解决的。
+
+# libraries Installation:
+openCV:
+sudo apt-get install python-opencv
+dlib:
+sudo apt-get install libboost-python-dev cmake
+sudo pip install dlib
+imutils:
+sudo pip install imutils
+numpy:
+sudo pip install numpy
+pandas:
+Sudoku pip install pandas
+sklearn:
+sudo pip install sklearn
+
+
+# download imdb and wiki dataset
+https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/imdb_crop.tar
+https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/wiki_crop.tar
+extract and put them into a folder named data
+
+# extract features and labels
+put the "shape_predictor_68_face_landmarks.dat" and scripts near the folder "data".
+create a new folder named "myData"
+run python scripts:
+python imdb2csv.py --test_size 0.2 --face_width 30 --max_age 17 --min_age 16 --threadID 3
+python imdb2csv.py --test_size 0.2 --face_width 30 --max_age 19 --min_age 18 --threadID 4
+python imdb2csv.py --test_size 0.2 --face_width 30 --max_age 21 --min_age 20 --threadID 6
+python imdb2csv.py --test_size 0.2 --face_width 30 --max_age 23 --min_age 22 --threadID 7
+python wiki2csv.py --test_size 0.2 --face_width 30 --max_age 23 --min_age 22 --threadID 10
+python wiki2csv.py --test_size 0.2 --face_width 30 --max_age 32 --min_age 30 --threadID 9
+.......
+these scripts can run on many machines and split the data according to age ranges.
+
+rename the files generated in "myData" from ID 0 to n(up to you)
+
+run python script:
+wiki_mergeData.py 
+before running, editing is needed.
+change some parameters of this script: num_thread=n+1, imagePath="myData/", savePath="neoData/".
+note that the script name is "wiki_.....", but it can also work on imdb, wiki and imdb are in same format after last step.
+Then you can get a merged data in "neoData"
+
+
+
